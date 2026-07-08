@@ -308,7 +308,8 @@ function evaluateSession(questions, finalAnswers, timeExpired) {
       }
     }
 
-    if (localCritiques.length === 0) {
+    const isClean = localCritiques.length === 0;
+    if (isClean) {
       localCritiques.push('Structurally sound. No violations detected on this response.');
     }
 
@@ -323,7 +324,8 @@ function evaluateSession(questions, finalAnswers, timeExpired) {
       passWordEconomy,
       critiques: localCritiques,
       rewrite: REWRITE_TEMPLATES[q.category],
-      questionScore
+      questionScore,
+      isClean
     });
 
     localCritiques.forEach((c) => critiques.push(`[${CATEGORY_LABELS[q.category].toUpperCase()}] ${c}`));
@@ -1138,10 +1140,14 @@ export default function Forge() {
                       <p className="text-sm text-slate-200 font-sans mb-3 leading-relaxed">
                         {item.answer ? item.answer : <span className="text-red-400">No response recorded.</span>}
                       </p>
-                      <ul className="space-y-1 mb-3 text-xs text-amber-400/90 font-sans">
+                      <ul className={`space-y-1 mb-3 text-xs font-sans ${item.isClean ? 'text-emerald-400/90' : 'text-amber-400/90'}`}>
                         {item.critiques.map((c, i) => (
                           <li key={i} className="flex gap-2">
-                            <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                            {item.isClean ? (
+                              <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                            ) : (
+                              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                            )}
                             <span>{c}</span>
                           </li>
                         ))}
