@@ -617,32 +617,43 @@ export default function Forge() {
     setSpeechError('');
     const baseText = currentAnswerDraft;
     const recognition = new SpeechRecognitionAPI();
-    recognition.continuous = true;
+    // continuous is deliberately false. Testing showed some browsers do
+    // not emit distinct, non-overlapping final segments in continuous
+    // mode — each new "final" result re-included everything said so far,
+    // causing rapid, compounding word duplication. Non-continuous mode
+    // finalizes once per utterance and stops cleanly, removing that
+    // failure mode entirely rather than trying to detect and undo it.
+    // To add more after it stops, press Speak Answer again — it appends
+    // onto whatever's already in the box.
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
     recognition.onresult = (event) => {
-      // Rebuild the full transcript for this recording session from the
-      // complete results array every time, rather than appending deltas
-      // onto an accumulator. Some browsers re-fire onresult for speech
-      // that's already been finalized as part of continuous listening,
-      // and appending each time caused the same words to duplicate
-      // rapidly. Recomputing from scratch is idempotent: however many
-      // times this fires, the result is always correct, never repeated.
-      let sessionFinal = '';
-      let sessionInterim = '';
-      for (let i = 0; i < event.results.length; i += 1) {
-        const piece = event.results[i][0].transcript;
+      // Defensive: take only the most recent final/interim result rather
+      // than concatenating every entry, in case a single utterance still
+      // produces more than one final segment on some browsers.
+      let latestFinal = '';
+      let latestInterim = '';
+      for (let i = event.results.length - 1; i >= 0; i -= 1) {
         if (event.results[i].isFinal) {
-          sessionFinal += piece;
-        } else {
-          sessionInterim += piece;
+          latestFinal = event.results[i][0].transcript;
+          break;
         }
       }
-      const trimmedBase = baseText.replace(/\s+$/, '');
-      const needsSpace = trimmedBase.length > 0 && sessionFinal.length > 0;
-      setCurrentAnswerDraft(`${trimmedBase}${needsSpace ? ' ' : ''}${sessionFinal.trim()}`);
-      setInterimSpeechText(sessionInterim);
+      for (let i = event.results.length - 1; i >= 0; i -= 1) {
+        if (!event.results[i].isFinal) {
+          latestInterim = event.results[i][0].transcript;
+          break;
+        }
+      }
+      if (latestFinal) {
+        const trimmedBase = baseText.replace(/\s+$/, '');
+        const trimmedFinal = latestFinal.trim();
+        const needsSpace = trimmedBase.length > 0 && trimmedFinal.length > 0;
+        setCurrentAnswerDraft(`${trimmedBase}${needsSpace ? ' ' : ''}${trimmedFinal}`);
+      }
+      setInterimSpeechText(latestInterim);
     };
 
     recognition.onerror = (event) => {
