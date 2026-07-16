@@ -615,32 +615,34 @@ export default function Forge() {
     if (!SpeechRecognitionAPI) return;
     stopActiveRecognition();
     setSpeechError('');
+    const baseText = currentAnswerDraft;
     const recognition = new SpeechRecognitionAPI();
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
     recognition.onresult = (event) => {
-      let finalChunk = '';
-      let interimChunk = '';
-      for (let i = event.resultIndex; i < event.results.length; i += 1) {
+      // Rebuild the full transcript for this recording session from the
+      // complete results array every time, rather than appending deltas
+      // onto an accumulator. Some browsers re-fire onresult for speech
+      // that's already been finalized as part of continuous listening,
+      // and appending each time caused the same words to duplicate
+      // rapidly. Recomputing from scratch is idempotent: however many
+      // times this fires, the result is always correct, never repeated.
+      let sessionFinal = '';
+      let sessionInterim = '';
+      for (let i = 0; i < event.results.length; i += 1) {
         const piece = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
-          finalChunk += piece;
+          sessionFinal += piece;
         } else {
-          interimChunk += piece;
+          sessionInterim += piece;
         }
       }
-      if (finalChunk) {
-        setCurrentAnswerDraft((prev) => {
-          const trimmedPrev = prev.replace(/\s+$/, '');
-          const needsSpace = trimmedPrev.length > 0;
-          return `${trimmedPrev}${needsSpace ? ' ' : ''}${finalChunk.trim()}`;
-        });
-        setInterimSpeechText('');
-      } else {
-        setInterimSpeechText(interimChunk);
-      }
+      const trimmedBase = baseText.replace(/\s+$/, '');
+      const needsSpace = trimmedBase.length > 0 && sessionFinal.length > 0;
+      setCurrentAnswerDraft(`${trimmedBase}${needsSpace ? ' ' : ''}${sessionFinal.trim()}`);
+      setInterimSpeechText(sessionInterim);
     };
 
     recognition.onerror = (event) => {
