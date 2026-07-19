@@ -74,7 +74,14 @@ const QUESTION_BANK = {
     "If your name tag only had room for one line, what would it say?",
     "Explain what you're building without using a single word your own industry would use for it.",
     "State the problem you solve in one sentence, with zero adjectives.",
-    "Walk through, mechanically, what happens in the first ten seconds someone opens your product."
+    "Walk through, mechanically, what happens in the first ten seconds someone opens your product.",
+    "If I described your company to someone who's never heard of it, what's the one sentence that would make them get it?",
+    "What's the single biggest misconception people have about what you do after a thirty-second explanation?",
+    "Describe the exact moment a customer realizes your product is working.",
+    "If your product disappeared tomorrow, what specific task would people be stuck doing by hand again?",
+    "What do you call your own product internally that's different from how you'd describe it to an outsider?",
+    "Finish this sentence: my company exists because ___.",
+    "What's the shortest, most boring way to describe what you do that's still completely accurate?"
   ],
   metrics: [
     "What do you understand about this space that most people miss?",
@@ -83,7 +90,13 @@ const QUESTION_BANK = {
     "Where does the average new customer actually find you?",
     "Describe your growth trend over the last few months, with numbers.",
     "Name one number that proves this is actually working.",
-    "Tell me something about your users that would genuinely surprise us."
+    "Tell me something about your users that would genuinely surprise us.",
+    "What's converting right now that surprised you?",
+    "If you had to bet on one channel to double down on, which one and why?",
+    "What's the one metric you check first every morning, and what was it yesterday?",
+    "Who was your very first paying customer, and how did they find you?",
+    "What's broken in your funnel right now that you haven't fixed yet?",
+    "How many people have you talked to who said no, and what did they say?"
   ],
   moat: [
     "Why couldn't a well-funded team clone this in a single weekend?",
@@ -92,7 +105,13 @@ const QUESTION_BANK = {
     "What do you know about this problem that a well-capitalized outsider wouldn't?",
     "If a larger competitor copied this exactly tomorrow, what would still belong to you?",
     "Which single part of your business would take a copycat the longest to rebuild?",
-    "What's the slowest, most painful part of this business that nobody else wants to do?"
+    "What's the slowest, most painful part of this business that nobody else wants to do?",
+    "What would a smart competitor need to believe about the market to justify copying you?",
+    "What's the one relationship or piece of access you have that a new entrant couldn't just buy?",
+    "If you had a twin company with unlimited funding, what would still make you win?",
+    "What part of your business gets stronger, not weaker, the more competitors show up?",
+    "What's the real reason no one's done this already?",
+    "What would it cost, in time or money, for someone else to rebuild what you have right now?"
   ]
 };
 
