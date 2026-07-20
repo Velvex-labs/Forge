@@ -68,50 +68,50 @@ const JARGON_BLACKLIST = {
 
 const QUESTION_BANK = {
   clarity: [
-    "In one line, what does your company actually make?",
-    "Describe what you do in a single sentence a stranger outside your field would understand immediately.",
-    "Who needs this the most, right now?",
-    "If your name tag only had room for one line, what would it say?",
-    "Explain what you're building without using a single word your own industry would use for it.",
-    "State the problem you solve in one sentence, with zero adjectives.",
-    "Walk through, mechanically, what happens in the first ten seconds someone opens your product.",
-    "If I described your company to someone who's never heard of it, what's the one sentence that would make them get it?",
-    "What's the single biggest misconception people have about what you do after a thirty-second explanation?",
-    "Describe the exact moment a customer realizes your product is working.",
-    "If your product disappeared tomorrow, what specific task would people be stuck doing by hand again?",
-    "What do you call your own product internally that's different from how you'd describe it to an outsider?",
-    "Finish this sentence: my company exists because ___.",
-    "What's the shortest, most boring way to describe what you do that's still completely accurate?"
+    { text: "In one line, what does your company actually make?", shape: 'one_liner' },
+    { text: "Describe what you do in a single sentence a stranger outside your field would understand immediately.", shape: 'one_liner' },
+    { text: "Who needs this the most, right now?", shape: 'concrete_specific' },
+    { text: "If your name tag only had room for one line, what would it say?", shape: 'one_liner' },
+    { text: "Explain what you're building without using a single word your own industry would use for it.", shape: 'no_jargon_strict' },
+    { text: "State the problem you solve in one sentence, with zero adjectives.", shape: 'no_jargon_strict' },
+    { text: "Walk through, mechanically, what happens in the first ten seconds someone opens your product.", shape: 'mechanism_steps' },
+    { text: "If I described your company to someone who's never heard of it, what's the one sentence that would make them get it?", shape: 'one_liner' },
+    { text: "What's the single biggest misconception people have about what you do after a thirty-second explanation?", shape: 'concrete_specific' },
+    { text: "Describe the exact moment a customer realizes your product is working.", shape: 'concrete_specific' },
+    { text: "If your product disappeared tomorrow, what specific task would people be stuck doing by hand again?", shape: 'concrete_specific' },
+    { text: "What do you call your own product internally that's different from how you'd describe it to an outsider?", shape: 'concrete_specific' },
+    { text: "Finish this sentence: my company exists because ___.", shape: 'one_liner' },
+    { text: "What's the shortest, most boring way to describe what you do that's still completely accurate?", shape: 'no_jargon_strict' }
   ],
   metrics: [
-    "What do you understand about this space that most people miss?",
-    "Walk me through exactly how you land your next 100 customers.",
-    "Give me the real traction numbers since you started charging for this.",
-    "Where does the average new customer actually find you?",
-    "Describe your growth trend over the last few months, with numbers.",
-    "Name one number that proves this is actually working.",
-    "Tell me something about your users that would genuinely surprise us.",
-    "What's converting right now that surprised you?",
-    "If you had to bet on one channel to double down on, which one and why?",
-    "What's the one metric you check first every morning, and what was it yesterday?",
-    "Who was your very first paying customer, and how did they find you?",
-    "What's broken in your funnel right now that you haven't fixed yet?",
-    "How many people have you talked to who said no, and what did they say?"
+    { text: "What do you understand about this space that most people miss?", shape: 'qualitative_insight' },
+    { text: "Walk me through exactly how you land your next 100 customers.", shape: 'channel_mechanism' },
+    { text: "Give me the real traction numbers since you started charging for this.", shape: 'hard_number' },
+    { text: "Where does the average new customer actually find you?", shape: 'named_source' },
+    { text: "Describe your growth trend over the last few months, with numbers.", shape: 'hard_number' },
+    { text: "Name one number that proves this is actually working.", shape: 'hard_number' },
+    { text: "Tell me something about your users that would genuinely surprise us.", shape: 'qualitative_insight' },
+    { text: "What's converting right now that surprised you?", shape: 'qualitative_insight' },
+    { text: "If you had to bet on one channel to double down on, which one and why?", shape: 'channel_mechanism' },
+    { text: "What's the one metric you check first every morning, and what was it yesterday?", shape: 'hard_number' },
+    { text: "Who was your very first paying customer, and how did they find you?", shape: 'named_source' },
+    { text: "What's broken in your funnel right now that you haven't fixed yet?", shape: 'qualitative_insight' },
+    { text: "How many people have you talked to who said no, and what did they say?", shape: 'hard_number' }
   ],
   moat: [
-    "Why couldn't a well-funded team clone this in a single weekend?",
-    "What stops a rival with ten times your budget from wiping you out in six months?",
-    "Describe your actual unfair advantage mechanically — no adjectives allowed.",
-    "What do you know about this problem that a well-capitalized outsider wouldn't?",
-    "If a larger competitor copied this exactly tomorrow, what would still belong to you?",
-    "Which single part of your business would take a copycat the longest to rebuild?",
-    "What's the slowest, most painful part of this business that nobody else wants to do?",
-    "What would a smart competitor need to believe about the market to justify copying you?",
-    "What's the one relationship or piece of access you have that a new entrant couldn't just buy?",
-    "If you had a twin company with unlimited funding, what would still make you win?",
-    "What part of your business gets stronger, not weaker, the more competitors show up?",
-    "What's the real reason no one's done this already?",
-    "What would it cost, in time or money, for someone else to rebuild what you have right now?"
+    { text: "Why couldn't a well-funded team clone this in a single weekend?", shape: 'structural_barrier' },
+    { text: "What stops a rival with ten times your budget from wiping you out in six months?", shape: 'structural_barrier' },
+    { text: "Describe your actual unfair advantage mechanically — no adjectives allowed.", shape: 'no_jargon_strict' },
+    { text: "What do you know about this problem that a well-capitalized outsider wouldn't?", shape: 'domain_knowledge' },
+    { text: "If a larger competitor copied this exactly tomorrow, what would still belong to you?", shape: 'structural_barrier' },
+    { text: "Which single part of your business would take a copycat the longest to rebuild?", shape: 'structural_barrier' },
+    { text: "What's the slowest, most painful part of this business that nobody else wants to do?", shape: 'structural_barrier' },
+    { text: "What would a smart competitor need to believe about the market to justify copying you?", shape: 'structural_barrier' },
+    { text: "What's the one relationship or piece of access you have that a new entrant couldn't just buy?", shape: 'structural_barrier' },
+    { text: "If you had a twin company with unlimited funding, what would still make you win?", shape: 'structural_barrier' },
+    { text: "What part of your business gets stronger, not weaker, the more competitors show up?", shape: 'structural_barrier' },
+    { text: "What's the real reason no one's done this already?", shape: 'domain_knowledge' },
+    { text: "What would it cost, in time or money, for someone else to rebuild what you have right now?", shape: 'structural_barrier' }
   ]
 };
 
@@ -186,7 +186,7 @@ function buildSessionQuestions(questionsPerPillar) {
     const pool = shuffleArray(QUESTION_BANK[category]);
     const count = Math.min(questionsPerPillar, pool.length);
     for (let i = 0; i < count; i += 1) {
-      picked.push({ category, text: pool[i] });
+      picked.push({ category, text: pool[i].text, shape: pool[i].shape });
     }
   });
   return shuffleArray(picked);
@@ -205,15 +205,154 @@ function getStatusTier(score) {
 const REFERENCE_COMPANY_ANALOGY = /(like|similar to|just like|the same way)\s+(the\s+|as\s+)?(uber|airbnb|amazon|netflix|google|facebook|meta|stripe|shopify|doordash|instacart|spotify|tesla)\b/i;
 const GENERIC_EVIDENCE_ANALOGY = /(similar companies have|other startups have shown|comparable companies have)/i;
 const TOP_DOWN_SIZING = /(\d+\s*(billion|trillion)|tam of \$|total addressable market|capture (just )?\d+% of)/i;
+const VAGUE_LANGUAGE = /(everyone|everybody|anyone|anybody|people in general|various people|all kinds of|lots of people|many people|different types|a lot of|kind of|sort of|basically|generally speaking)/i;
+const SEQUENCE_WORDS = /(first|then|next|after that|once|finally|step \d|step one|step two)/i;
+const CHANNEL_NAMES = /(email|cold outreach|linkedin|referral|word of mouth|content|seo|ads|partnership|community|network|sales call|dm|instagram|twitter|x\.com|tiktok|founder-led|warm intro|friend|colleague|event|conference|forum|reddit|google search)/i;
+const HYPE_PHRASES = /(growing fast|huge interest|massive potential|viral traction|a lot of demand|tons of interest)/i;
+const ADJECTIVE_HEDGES = /(amazing|incredible|powerful|smart|seamless|intuitive|robust|innovative|cutting-edge|game-changing)/i;
 
 function hasEvidenceAnalogy(answer) {
   return REFERENCE_COMPANY_ANALOGY.test(answer) || GENERIC_EVIDENCE_ANALOGY.test(answer);
 }
 
+// Each shape represents a distinct kind of evidence a question is
+// actually asking for, so the same answer isn't held to a mismatched
+// bar — e.g. a channel-acquisition question no longer requires a $ or %
+// sign the way a hard-revenue question legitimately does.
+function applyShapeChecks(shape, answer) {
+  let delta = 0;
+  const critiques = [];
+
+  if (shape === 'one_liner') {
+    if (/\bfor\b/i.test(answer)) {
+      delta += 6;
+    } else {
+      delta -= 10;
+      critiques.push('No structural analogy detected ("X for Y"). Without one, the listener builds the mental model unassisted.');
+    }
+  }
+
+  if (shape === 'no_jargon_strict') {
+    if (ADJECTIVE_HEDGES.test(answer)) {
+      delta -= 15;
+      critiques.push('This question explicitly asked for no adjectives or industry language — using one here is a direct miss on what was asked, not just a style note.');
+    } else {
+      delta += 8;
+    }
+  }
+
+  if (shape === 'concrete_specific') {
+    if (VAGUE_LANGUAGE.test(answer)) {
+      delta -= 18;
+      critiques.push('Answered with a general category ("everyone," "people in general") instead of a specific one. Vagueness here reads as not having actually thought about it.');
+    } else {
+      delta += 6;
+    }
+  }
+
+  if (shape === 'mechanism_steps') {
+    if (SEQUENCE_WORDS.test(answer)) {
+      delta += 10;
+    } else {
+      delta -= 12;
+      critiques.push('No sequence was described. This question asks for a mechanical walkthrough, not a summary — name the actual steps in order.');
+    }
+  }
+
+  if (shape === 'hard_number') {
+    const hasNumber = /\d+/.test(answer);
+    const hasCurrencyOrPercent = /[$%]/.test(answer);
+    const hasTractionWord = /(mrr|arr|mom|yoy|churn|cac|ltv|paying customers|revenue|conversion)/i.test(answer);
+    if (!hasNumber) {
+      delta -= 28;
+      critiques.push('No number at all. This question is specifically asking for one — a figure, a count, a rate — not a description.');
+    } else if (!hasCurrencyOrPercent) {
+      delta -= 8;
+      critiques.push('Has a number but no unit ($ or %) attached to it. Attach the unit so the figure can\'t be misread.');
+    } else {
+      delta += 10;
+    }
+    if (hasTractionWord) delta += 8;
+    if (HYPE_PHRASES.test(answer)) {
+      delta -= 18;
+      critiques.push('Hyperbole substituted for data ("growing fast", "huge interest"). Name the number or cut the sentence.');
+    }
+  }
+
+  if (shape === 'channel_mechanism') {
+    if (!CHANNEL_NAMES.test(answer)) {
+      delta -= 22;
+      critiques.push('No actual channel was named. "Marketing" or "outreach" alone isn\'t a mechanism — say specifically where these people come from.');
+    } else {
+      delta += 12;
+      if (/\d+/.test(answer)) delta += 6;
+    }
+    if (HYPE_PHRASES.test(answer)) {
+      delta -= 15;
+      critiques.push('Hyperbole substituted for a real channel. Name the specific mechanism, not the excitement about it.');
+    }
+  }
+
+  if (shape === 'named_source') {
+    if (!CHANNEL_NAMES.test(answer)) {
+      delta -= 20;
+      critiques.push('No specific source was named. This question wants exactly where a real person came from, not a general answer.');
+    } else {
+      delta += 12;
+    }
+  }
+
+  if (shape === 'qualitative_insight') {
+    if (VAGUE_LANGUAGE.test(answer)) {
+      delta -= 16;
+      critiques.push('This reads as a general observation, not a specific one. The question wants something you actually noticed, not a category.');
+    } else {
+      delta += 8;
+    }
+    if (HYPE_PHRASES.test(answer)) {
+      delta -= 12;
+      critiques.push('Hyperbole substituted for an actual observation.');
+    }
+  }
+
+  if (shape === 'structural_barrier') {
+    const weak = /(our ui is better|we are faster|we care more|first mover|better design|nicer interface|move faster than|work harder)/i.test(answer);
+    const strong = /(proprietary dataset|network effect|integrations|switching cost|regulatory|exclusive|api integration|patent|data moat|community)/i.test(answer);
+    if (weak) {
+      delta -= 32;
+      critiques.push('The defense rests on an adjective ("better", "faster", "first"). Any funded competitor neutralizes this within a quarter.');
+    }
+    if (strong) {
+      delta += 12;
+    } else if (!weak) {
+      delta -= 15;
+      critiques.push('No structural barrier was named. State the specific asset a competitor would need to replicate this.');
+    }
+  }
+
+  if (shape === 'domain_knowledge') {
+    if (VAGUE_LANGUAGE.test(answer)) {
+      delta -= 16;
+      critiques.push('This is answered at a general level. The question wants the specific thing you know that an outsider wouldn\'t — name it.');
+    } else {
+      delta += 8;
+    }
+  }
+
+  return { delta, critiques };
+}
+
 const REWRITE_TEMPLATES = {
-  clarity: 'Structure: "We build [ONE CONCRETE PRODUCT NOUN] for [SPECIFIC CUSTOMER], so they can [JOB] without [OLD PAINFUL METHOD]." Replace every bracket with a specific — no adjectives.',
-  metrics: 'Structure: "In the last [TIMEFRAME], we went from [$/# START] to [$/# END] — a [N]% [increase/decrease] — driven by [ONE SPECIFIC CHANNEL]." Insert real figures only.',
-  moat: 'Structure: "Because we [OWN OR CONTROL A SPECIFIC ASSET], a competitor would need to [SLOW OR EXPENSIVE ACTION] before they could match us." Name the asset, not the adjective.'
+  one_liner: 'Structure: "We build [ONE CONCRETE PRODUCT NOUN] for [SPECIFIC CUSTOMER], so they can [JOB] without [OLD PAINFUL METHOD]." Replace every bracket with a specific — no adjectives.',
+  no_jargon_strict: 'Say it the way you\'d explain it to a relative with no context: name the actual thing, the actual person it helps, and the actual result — zero industry words, zero adjectives.',
+  concrete_specific: 'Replace the general category with one real example — specificity is the entire answer here, not a supporting detail.',
+  mechanism_steps: 'Structure: "First, [STEP]. Then, [STEP]. Finally, [STEP]." Three real steps, in order — a summary of the outcome isn\'t a mechanism.',
+  hard_number: 'Structure: "[METRIC] went from [$/# START] to [$/# END] over [TIMEFRAME]." A real number with a unit attached — no unit means it doesn\'t count as evidence here.',
+  channel_mechanism: 'Structure: "[SPECIFIC CHANNEL], reaching about [N] people, converting at roughly [N]%." Name the actual channel before anything else.',
+  named_source: 'Structure: "[SPECIFIC CHANNEL OR PERSON], through [HOW]." A named source, not a category of sources.',
+  qualitative_insight: 'Structure: "[SPECIFIC, SURPRISING FACT] — most people assume [COMMON WRONG BELIEF], but [WHAT YOU ACTUALLY FOUND]." One real observation, not a theme.',
+  structural_barrier: 'Structure: "Because we [OWN OR CONTROL A SPECIFIC ASSET], a competitor would need to [SLOW OR EXPENSIVE ACTION] before they could match us." Name the asset, not the adjective.',
+  domain_knowledge: 'Structure: "Most outsiders assume [COMMON WRONG BELIEF]. What\'s actually true is [SPECIFIC FACT], which I know because [SOURCE OF THAT KNOWLEDGE]."'
 };
 
 function evaluateSession(questions, finalAnswers, timeExpired) {
@@ -269,61 +408,17 @@ function evaluateSession(questions, finalAnswers, timeExpired) {
         localCritiques.push(`At ${wordCount} word${wordCount === 1 ? '' : 's'}, this reads as evasive rather than concise.`);
       }
 
-      if (q.category === 'clarity') {
-        const hasAnalog = /\bfor\b/i.test(answer);
-        if (hasAnalog) {
-          questionScore += 6;
-        } else if (wordCount <= WORD_CEILING) {
-          questionScore -= 10;
-          localCritiques.push('No structural analogy detected ("X for Y"). Without one, the listener builds the mental model unassisted.');
-        }
+      const shapeResult = applyShapeChecks(q.shape, answer);
+      questionScore += shapeResult.delta;
+      localCritiques.push(...shapeResult.critiques);
+
+      if ((q.category === 'metrics' || q.category === 'moat') && hasEvidenceAnalogy(answer)) {
+        questionScore -= 13;
+        localCritiques.push("Borrowed credibility from another company's trajectory instead of your own data. Accelerator partners treat analogy-based evidence as weak — your own specifics are the only thing that counts.");
       }
-
-      if (q.category === 'metrics') {
-        const hasNumber = /\d+/.test(answer);
-        const hasCurrencyOrPercent = /[$%]/.test(answer);
-        const hasTractionWord = /(mrr|arr|mom|yoy|churn|cac|ltv|paying customers|revenue|conversion)/i.test(answer);
-        const hasHype = /(growing fast|huge interest|massive potential|viral traction|a lot of demand|tons of interest)/i.test(answer);
-
-        if (!(hasNumber && hasCurrencyOrPercent)) {
-          questionScore -= 28;
-          localCritiques.push('No hard economic vector ($ or %) present. An unquantified claim reads as unproven demand.');
-        } else {
-          questionScore += 10;
-        }
-        if (hasTractionWord) questionScore += 8;
-        if (hasHype) {
-          questionScore -= 18;
-          localCritiques.push('Hyperbole substituted for data ("growing fast", "huge interest"). Name the number or cut the sentence.');
-        }
-        if (hasEvidenceAnalogy(answer)) {
-          questionScore -= 15;
-          localCritiques.push("Borrowed credibility from another company's trajectory instead of your own data. Accelerator partners treat analogy-based evidence as weak — primary data from your own users is the only thing that counts.");
-        }
-        if (TOP_DOWN_SIZING.test(answer)) {
-          questionScore -= 15;
-          localCritiques.push('Top-down market sizing ("$X billion market," "capture just N%") is a known weak argument. Use bottom-up math from your own price and reachable customers, or point to a close comparable\'s real revenue.');
-        }
-      }
-
-      if (q.category === 'moat') {
-        const weak = /(our ui is better|we are faster|we care more|first mover|better design|nicer interface|move faster than|work harder)/i.test(answer);
-        const strong = /(proprietary dataset|network effect|integrations|switching cost|regulatory|exclusive|api integration|patent|data moat|community)/i.test(answer);
-
-        if (weak) {
-          questionScore -= 32;
-          localCritiques.push('The defense rests on an adjective ("better", "faster", "first"). Any funded competitor neutralizes this within a quarter.');
-        }
-        if (strong) {
-          questionScore += 12;
-        } else if (!weak) {
-          questionScore -= 15;
-          localCritiques.push('No structural barrier was named. State the specific asset a competitor would need to replicate this.');
-        }
-        if (hasEvidenceAnalogy(answer)) {
-          questionScore -= 12;
-          localCritiques.push("Leaning on another company's outcome as proof of your own defensibility is borrowed credibility, not evidence.");
-        }
+      if (q.category === 'metrics' && TOP_DOWN_SIZING.test(answer)) {
+        questionScore -= 15;
+        localCritiques.push('Top-down market sizing ("$X billion market," "capture just N%") is a known weak argument. Use bottom-up math from your own price and reachable customers, or point to a close comparable\'s real revenue.');
       }
     }
 
@@ -342,7 +437,7 @@ function evaluateSession(questions, finalAnswers, timeExpired) {
       wordCount,
       passWordEconomy,
       critiques: localCritiques,
-      rewrite: REWRITE_TEMPLATES[q.category],
+      rewrite: REWRITE_TEMPLATES[q.shape] || REWRITE_TEMPLATES[q.category],
       questionScore,
       isClean
     });
