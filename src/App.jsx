@@ -495,6 +495,43 @@ const DEFAULT_RESULTS = {
   timeExpired: false
 };
 
+const HISTORY_STORAGE_KEY = 'forge_session_history';
+const HISTORY_MAX_ENTRIES = 50;
+
+function loadSessionHistory() {
+  try {
+    const raw = window.localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveSessionHistory(history) {
+  try {
+    const trimmed = history.slice(-HISTORY_MAX_ENTRIES);
+    window.localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(trimmed));
+    return trimmed;
+  } catch (e) {
+    return history;
+  }
+}
+
+function appendSessionRecord(record) {
+  const updated = [...loadSessionHistory(), record];
+  return saveSessionHistory(updated);
+}
+
+function clearStoredSessionHistory() {
+  try {
+    window.localStorage.removeItem(HISTORY_STORAGE_KEY);
+  } catch (e) {
+    // ignore — nothing to clean up if storage isn't available
+  }
+}
+
 // ---------------- Presentational subcomponents ----------------
 
 function SparkField() {
@@ -652,6 +689,45 @@ function GaugeRow({ label, value, colorClass }) {
   );
 }
 
+function TrendRow({ label, values, colorClass }) {
+  return (
+    <div className="flex items-center justify-between text-xs gap-3">
+      <span className="text-slate-500 flex-shrink-0">{label}</span>
+      <span className={`font-mono ${colorClass} text-right`}>
+        {values.map((v, i) => (
+          <span key={i}>
+            {v}
+            {i < values.length - 1 ? <span className="text-slate-700 mx-1.5">&rarr;</span> : null}
+          </span>
+        ))}
+      </span>
+    </div>
+  );
+}
+
+function SessionHistoryPanel({ history }) {
+  if (history.length < 2) {
+    return (
+      <div className="bg-slate-950/40 border border-slate-900 forge-panel p-6 rounded-lg backdrop-blur-md">
+        <h3 className="text-sm font-bold text-white mb-2 uppercase tracking-wider">Session History</h3>
+        <p className="text-xs text-slate-500 font-sans">First recorded session — come back after your next one to see a trend.</p>
+      </div>
+    );
+  }
+  const recent = history.slice(-6);
+  return (
+    <div className="bg-slate-950/40 border border-slate-900 forge-panel p-6 rounded-lg backdrop-blur-md">
+      <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Session History ({history.length} total)</h3>
+      <div className="space-y-3">
+        <TrendRow label="Overall" values={recent.map((r) => r.score)} colorClass="text-white" />
+        <TrendRow label="Clarity" values={recent.map((r) => r.clarityScore)} colorClass="text-blue-400" />
+        <TrendRow label="Metrics" values={recent.map((r) => r.metricScore)} colorClass="text-sky-400" />
+        <TrendRow label="Defensibility" values={recent.map((r) => r.moatScore)} colorClass="text-indigo-400" />
+      </div>
+    </div>
+  );
+}
+
 // ---------------- Main component ----------------
 
 export default function Forge() {
@@ -677,6 +753,7 @@ export default function Forge() {
 
   const [logLines, setLogLines] = useState([]);
   const [results, setResults] = useState(DEFAULT_RESULTS);
+  const [sessionHistory, setSessionHistory] = useState([]);
 
   const processingTimeoutsRef = useRef([]);
   const recognitionRef = useRef(null);
@@ -702,7 +779,19 @@ export default function Forge() {
         setLogLines((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${line}`]);
         if (idx === PROCESSING_LOG_LINES.length - 1) {
           const finalId = setTimeout(() => {
-            setResults(evaluateSession(questions, finalAnswers, timeExpired));
+            const computed = evaluateSession(questions, finalAnswers, timeExpired);
+            const historyRecord = {
+              timestamp: Date.now(),
+              difficulty,
+              score: computed.score,
+              clarityScore: computed.clarityScore,
+              metricScore: computed.metricScore,
+              moatScore: computed.moatScore,
+              companyName: entity.companyName,
+              sector: entity.sector
+            };
+            setSessionHistory(appendSessionRecord(historyRecord));
+            setResults(computed);
             setPhase('results');
           }, 650);
           processingTimeoutsRef.current.push(finalId);
@@ -828,7 +917,16 @@ export default function Forge() {
     setLogLines([]);
   };
 
+  const clearSessionHistory = () => {
+    clearStoredSessionHistory();
+    setSessionHistory([]);
+  };
+
   // ---- Effects ----
+
+  useEffect(() => {
+    setSessionHistory(loadSessionHistory());
+  }, []);
 
   useEffect(() => {
     let idx = 0;
@@ -998,6 +1096,17 @@ export default function Forge() {
             <div className="w-full max-w-xl bg-slate-950/40 border border-slate-900 forge-panel p-6 rounded-lg backdrop-blur-md forge-fade-in">
               <div className="text-xs text-slate-500 mb-2">PRE-INTERROGATION // ENTITY INTAKE</div>
               <h2 className="text-lg font-bold text-white mb-6 border-b border-slate-900 pb-2">Core Entity Identification</h2>
+
+              {sessionHistory.length > 0 && (
+                <div className="mb-5 text-[11px] text-slate-500 font-sans flex items-center justify-between gap-3">
+                  <span>
+                    {sessionHistory.length} session{sessionHistory.length === 1 ? '' : 's'} recorded &mdash; best score {Math.max(...sessionHistory.map((h) => h.score))}
+                  </span>
+                  <button type="button" onClick={clearSessionHistory} className="text-slate-600 hover:text-red-400 underline flex-shrink-0">
+                    Clear history
+                  </button>
+                </div>
+              )}
 
               <div className="space-y-5">
                 <div>
@@ -1247,6 +1356,8 @@ export default function Forge() {
                   </p>
                 </div>
               </div>
+
+              <SessionHistoryPanel history={sessionHistory} />
 
               <div className="bg-slate-950/40 border border-slate-900 forge-panel p-6 rounded-lg backdrop-blur-md">
                 <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider border-b border-slate-900 pb-2">Response-Level Audit</h3>
