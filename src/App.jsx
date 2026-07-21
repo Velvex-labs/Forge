@@ -524,12 +524,19 @@ function appendSessionRecord(record) {
   return saveSessionHistory(updated);
 }
 
-function clearStoredSessionHistory() {
-  try {
-    window.localStorage.removeItem(HISTORY_STORAGE_KEY);
-  } catch (e) {
-    // ignore — nothing to clean up if storage isn't available
-  }
+function normalizeCompanyName(name) {
+  return (name || '').trim().toLowerCase();
+}
+
+function filterHistoryByCompany(history, companyName) {
+  const normalized = normalizeCompanyName(companyName);
+  if (!normalized) return [];
+  return history.filter((h) => normalizeCompanyName(h.companyName) === normalized);
+}
+
+function removeCompanyHistory(history, companyName) {
+  const normalized = normalizeCompanyName(companyName);
+  return history.filter((h) => normalizeCompanyName(h.companyName) !== normalized);
 }
 
 // ---------------- Presentational subcomponents ----------------
@@ -710,7 +717,7 @@ function SessionHistoryPanel({ history }) {
     return (
       <div className="bg-slate-950/40 border border-slate-900 forge-panel p-6 rounded-lg backdrop-blur-md">
         <h3 className="text-sm font-bold text-white mb-2 uppercase tracking-wider">Session History</h3>
-        <p className="text-xs text-slate-500 font-sans">First recorded session — come back after your next one to see a trend.</p>
+        <p className="text-xs text-slate-500 font-sans">First recorded session for this company &mdash; come back after your next one to see a trend.</p>
       </div>
     );
   }
@@ -918,8 +925,8 @@ export default function Forge() {
   };
 
   const clearSessionHistory = () => {
-    clearStoredSessionHistory();
-    setSessionHistory([]);
+    const remaining = removeCompanyHistory(sessionHistory, entity.companyName);
+    setSessionHistory(saveSessionHistory(remaining));
   };
 
   // ---- Effects ----
@@ -1018,6 +1025,7 @@ export default function Forge() {
   }, [phase, questionSubPhase, questionSecondsRemaining, difficulty]);
 
   const status = getStatusTier(results.score);
+  const currentCompanyHistory = filterHistoryByCompany(sessionHistory, entity.companyName);
   const shareText = encodeURIComponent(
     `Just ran my pitch through Forge. Scored ${results.score}/100 for interview readiness. Test yours before you walk into the room.`
   );
@@ -1097,10 +1105,10 @@ export default function Forge() {
               <div className="text-xs text-slate-500 mb-2">PRE-INTERROGATION // ENTITY INTAKE</div>
               <h2 className="text-lg font-bold text-white mb-6 border-b border-slate-900 pb-2">Core Entity Identification</h2>
 
-              {sessionHistory.length > 0 && (
+              {currentCompanyHistory.length > 0 && (
                 <div className="mb-5 text-[11px] text-slate-500 font-sans flex items-center justify-between gap-3">
                   <span>
-                    {sessionHistory.length} session{sessionHistory.length === 1 ? '' : 's'} recorded &mdash; best score {Math.max(...sessionHistory.map((h) => h.score))}
+                    {currentCompanyHistory.length} session{currentCompanyHistory.length === 1 ? '' : 's'} recorded on this device for "{entity.companyName.trim()}" &mdash; best score {Math.max(...currentCompanyHistory.map((h) => h.score))}
                   </span>
                   <button type="button" onClick={clearSessionHistory} className="text-slate-600 hover:text-red-400 underline flex-shrink-0">
                     Clear history
@@ -1357,7 +1365,7 @@ export default function Forge() {
                 </div>
               </div>
 
-              <SessionHistoryPanel history={sessionHistory} />
+              <SessionHistoryPanel history={currentCompanyHistory} />
 
               <div className="bg-slate-950/40 border border-slate-900 forge-panel p-6 rounded-lg backdrop-blur-md">
                 <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider border-b border-slate-900 pb-2">Response-Level Audit</h3>
