@@ -11,6 +11,7 @@ import {
   XCircle,
   RotateCcw,
   Share2,
+  Linkedin,
   ChevronRight,
   Mic,
   MicOff
@@ -209,6 +210,7 @@ const VAGUE_LANGUAGE = /(everyone|everybody|anyone|anybody|people in general|var
 const SEQUENCE_WORDS = /(first|then|next|after that|once|finally|step \d|step one|step two)/i;
 const CHANNEL_NAMES = /(email|cold outreach|linkedin|referral|word of mouth|content|seo|ads|partnership|community|network|sales call|dm|instagram|twitter|x\.com|tiktok|founder-led|warm intro|friend|colleague|event|conference|forum|reddit|google search)/i;
 const HYPE_PHRASES = /(growing fast|huge interest|massive potential|viral traction|a lot of demand|tons of interest)/i;
+const NON_ANSWER_PATTERNS = /(i don't have|we don't have|don't have (any|users|customers|revenue|data|metrics) yet|haven't (started|launched|figured out|thought about)|not yet\b|too early to (say|tell)|still (figuring out|working out|too early)|n\/a\b|not applicable)/i;
 const ADJECTIVE_HEDGES = /(amazing|incredible|powerful|smart|seamless|intuitive|robust|innovative|cutting-edge|game-changing)/i;
 
 function hasEvidenceAnalogy(answer) {
@@ -412,6 +414,10 @@ function evaluateSession(questions, finalAnswers, timeExpired) {
       questionScore += shapeResult.delta;
       localCritiques.push(...shapeResult.critiques);
 
+      if (NON_ANSWER_PATTERNS.test(answer)) {
+        questionScore -= 15;
+        localCritiques.push('This explains why there\'s no answer rather than answering the question. Even a partial, honest redirect ("no revenue yet, but 40 people on a paid waitlist") beats explaining the absence alone.');
+      }
       if ((q.category === 'metrics' || q.category === 'moat') && hasEvidenceAnalogy(answer)) {
         questionScore -= 13;
         localCritiques.push("Borrowed credibility from another company's trajectory instead of your own data. Accelerator partners treat analogy-based evidence as weak — your own specifics are the only thing that counts.");
@@ -757,6 +763,7 @@ export default function Forge() {
   const [isRecording, setIsRecording] = useState(false);
   const [interimSpeechText, setInterimSpeechText] = useState('');
   const [speechError, setSpeechError] = useState('');
+  const [shareCopyNotice, setShareCopyNotice] = useState('');
 
   const [logLines, setLogLines] = useState([]);
   const [results, setResults] = useState(DEFAULT_RESULTS);
@@ -922,6 +929,18 @@ export default function Forge() {
     setCurrentAnswerDraft('');
     setSecondsRemaining(SESSION_SECONDS);
     setLogLines([]);
+    setShareCopyNotice('');
+  };
+
+  const handleShareLinkedIn = async () => {
+    const caption = `Just ran my pitch through Forge. Scored ${results.score}/100 for interview readiness. Test yours before you walk into the room.`;
+    try {
+      await navigator.clipboard.writeText(caption);
+      setShareCopyNotice('Caption copied — paste it into the LinkedIn post box that just opened.');
+    } catch (e) {
+      setShareCopyNotice(`Clipboard unavailable — copy this caption manually: "${caption}"`);
+    }
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer');
   };
 
   const clearSessionHistory = () => {
@@ -1409,21 +1428,33 @@ export default function Forge() {
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="space-y-3">
                 <button
                   onClick={resetSession}
-                  className="px-4 py-2 border border-slate-800 hover:bg-slate-900 text-xs uppercase rounded transition-colors flex items-center gap-2"
+                  className="w-full px-4 py-2 border border-slate-800 hover:bg-slate-900 text-xs uppercase rounded transition-colors flex items-center justify-center gap-2"
                 >
                   <RotateCcw className="w-3.5 h-3.5" /> Re-Evaluate
                 </button>
-                <a
-                  href={shareUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-2 bg-blue-600 hover:bg-blue-500 text-white text-center font-bold text-xs uppercase rounded transition-colors flex items-center justify-center gap-2"
-                >
-                  <Share2 className="w-3.5 h-3.5" /> Share Core Metrics Array on X
-                </a>
+                <div className="flex gap-3">
+                  <a
+                    href={shareUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 py-2 bg-blue-600 hover:bg-blue-500 text-white text-center font-bold text-xs uppercase rounded transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Share2 className="w-3.5 h-3.5" /> Share on X
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleShareLinkedIn}
+                    className="flex-1 py-2 bg-blue-600 hover:bg-blue-500 text-white text-center font-bold text-xs uppercase rounded transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Linkedin className="w-3.5 h-3.5" /> Share on LinkedIn
+                  </button>
+                </div>
+                {shareCopyNotice && (
+                  <p className="text-[10px] text-slate-500 font-sans text-center">{shareCopyNotice}</p>
+                )}
               </div>
             </div>
           )}
